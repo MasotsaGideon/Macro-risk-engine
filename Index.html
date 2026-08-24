@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07111f">
+
+<title>Macro Risk Engine</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#07111f;
+    color:#ffffff;
+    font-family:Arial,sans-serif;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:15px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.title{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.subtitle{
+    color:#8fa0b5;
+    font-size:12px;
+    margin-top:4px;
+}
+
+.connection{
+    background:#374151;
+    padding:7px 10px;
+    border-radius:20px;
+    font-size:11px;
+}
+
+.risk{
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    background:#374151;
+    margin-bottom:15px;
+}
+
+.risk-title{
+    font-size:13px;
+    color:#b7c2d0;
+}
+
+.risk-value{
+    font-size:30px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+.card{
+    background:#111c2d;
+    border:1px solid #26364d;
+    border-radius:14px;
+    padding:15px;
+    margin-bottom:12px;
+}
+
+.card-title{
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.market{
+    background:#172438;
+    border-radius:10px;
+    padding:12px;
+}
+
+.market-name{
+    color:#9aa9bb;
+    font-size:11px;
+}
+
+.market-value{
+    font-size:20px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+.market-signal{
+    font-size:11px;
+    margin-top:4px;
+    color:#9aa9bb;
+}
+
+.timeframe{
+    text-align:center;
+    background:#172438;
+    padding:15px 5px;
+    border-radius:10px;
+}
+
+.timeframe-name{
+    font-size:13px;
+    color:#9aa9bb;
+}
+
+.timeframe-value{
+    font-size:19px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+.score{
+    font-size:30px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.info{
+    color:#9aa9bb;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.footer{
+    text-align:center;
+    color:#66758a;
+    font-size:11px;
+    padding:15px;
+}
+
+@media(max-width:500px){
+    .grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .title{
+        font-size:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <div>
+            <div class="title">
+                Macro Risk Engine
+            </div>
+
+            <div class="subtitle">
+                Live macroeconomic risk dashboard
+            </div>
+        </div>
+
+        <div class="connection" id="connection">
+            OFFLINE
+        </div>
+
+    </div>
+
+
+    <!-- OVERALL RISK -->
+
+    <div class="risk" id="riskBox">
+
+        <div class="risk-title">
+            OVERALL MARKET REGIME
+        </div>
+
+        <div class="risk-value" id="overallRisk">
+            WAITING
+        </div>
+
+    </div>
+
+
+    <!-- MARKET -->
+
+    <div class="card">
+
+        <div class="card-title">
+            Global Market
+        </div>
+
+        <div class="grid">
+
+            <div class="market">
+                <div class="market-name">
+                    DXY
+                </div>
+
+                <div class="market-value" id="dxy">
+                    —
+                </div>
+
+                <div class="market-signal">
+                    Dollar strength
+                </div>
+            </div>
+
+
+            <div class="market">
+                <div class="market-name">
+                    VIX
+                </div>
+
+                <div class="market-value" id="vix">
+                    —
+                </div>
+
+                <div class="market-signal">
+                    Market fear
+                </div>
+            </div>
+
+
+            <div class="market">
+                <div class="market-name">
+                    US 10Y
+                </div>
+
+                <div class="market-value" id="us10">
+                    —
+                </div>
+
+                <div class="market-signal">
+                    Treasury yield
+                </div>
+            </div>
+
+
+            <div class="market">
+                <div class="market-name">
+                    S&P 500
+                </div>
+
+                <div class="market-value" id="sp500">
+                    —
+                </div>
+
+                <div class="market-signal">
+                    Equity risk
+                </div>
+            </div>
+
+
+            <div class="market">
+                <div class="market-name">
+                    GOLD
+                </div>
+
+                <div class="market-value" id="gold">
+                    —
+                </div>
+
+                <div class="market-signal">
+                    Defensive asset
+                </div>
+            </div>
+
+
+            <div class="market">
+                <div class="market-name">
+                    OIL
+                </div>
+
+                <div class="market-value" id="oil">
+                    —
+                </div>
+
+                <div class="market-signal">
+                    Growth/commodity
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CURRENCIES -->
+
+    <div class="card">
+
+        <div class="card-title">
+            Currency Risk
+        </div>
+
+        <div class="grid">
+
+            <div class="market">
+                <div class="market-name">
+                    GBP
+                </div>
+
+                <div class="market-value" id="gbp">
+                    —
+                </div>
+
+                <div class="market-signal">
+                    Pound strength
+                </div>
+            </div>
+
+
+            <div class="market">
+                <div class="market-name">
+                    AUD
+                </div>
+
+                <div class="market-value" id="aud">
+                    —
+                </div>
+
+                <div class="market-signal">
+                    Risk currency
+                </div>
+            </div>
+
+
+            <div class="market">
+                <div class="market-name">
+                    CHF
+                </div>
+
+                <div class="market-value" id="chf">
+                    —
+                </div>
+
+                <div class="market-signal">
+                    Safe haven
+                </div>
+            </div>
+
+
+            <div class="market">
+                <div class="market-name">
+                    JPY
+                </div>
+
+                <div class="market-value" id="jpy">
+                    —
+                </div>
+
+                <div class="market-signal">
+                    Safe haven
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TIMEFRAMES -->
+
+    <div class="card">
+
+        <div class="card-title">
+            Risk By Trading Horizon
+        </div>
+
+        <div class="grid">
+
+            <div class="timeframe">
+
+                <div class="timeframe-name">
+                    H1
+                </div>
+
+                <div class="timeframe-value" id="h1">
+                    WAITING
+                </div>
+
+            </div>
+
+
+            <div class="timeframe">
+
+                <div class="timeframe-name">
+                    H4
+                </div>
+
+                <div class="timeframe-value" id="h4">
+                    WAITING
+                </div>
+
+            </div>
+
+
+            <div class="timeframe">
+
+                <div class="timeframe-name">
+                    D4
+                </div>
+
+                <div class="timeframe-value" id="d4">
+                    WAITING
+                </div>
+
+            </div>
+
+
+            <div class="timeframe">
+
+                <div class="timeframe-name">
+                    MACRO SCORE
+                </div>
+
+                <div class="score" id="score">
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATUS -->
+
+    <div class="card">
+
+        <div class="card-title">
+            System Status
+        </div>
+
+        <div class="info" id="status">
+
+            Macro engine initialized.
+
+            <br><br>
+
+            Waiting for live market-data connection.
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        Macro Risk Engine • Version 1
+
+    </div>
+
+</div>
+
+
+<script>
+
+console.log("Macro Risk Engine started");
+
+document.getElementById("status").innerHTML =
+"Dashboard successfully loaded.<br><br>" +
+"Next stage: connect live macroeconomic data.";
+
+</script>
+
+</body>
+</html>
