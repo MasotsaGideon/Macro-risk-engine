@@ -1,0 +1,18 @@
+{
+  "updated": null,
+  "status": "waiting",
+  "risk_score": 50,
+  "regime": "NEUTRAL",
+  "confidence": 0,
+  "markets": {
+    "DXY": null,
+    "VIX": null,
+    "SP500": null,
+    "NASDAQ": null,
+    "US10Y": null,
+    "GOLD": null,
+    "OIL": null,
+    "AUDJPY": null,
+    "CHFJPY": null
+  }
+}
