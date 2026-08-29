@@ -1,0 +1,42 @@
+name: Update Market Data
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-market:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update market timestamp
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+
+          with open("market.json", "r") as f:
+              data = json.load(f)
+
+          data["last_updated"] = datetime.now(timezone.utc).isoformat()
+
+          with open("market.json", "w") as f:
+              json.dump(data, f, indent=2)
+
+          print("market.json updated")
+          PY
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add market.json
+          git diff --cached --quiet || git commit -m "Update market data"
+          git push
